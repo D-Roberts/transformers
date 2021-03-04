@@ -404,7 +404,7 @@ def quantize(onnx_model_path: Path) -> Path:
     Returns: The Path generated for the quantized
     """
     import onnx
-    from onnxruntime.quantization import QuantizationMode, quantize
+    from onnxruntime.quantization import QuantizationMode, quantize_dynamic
 
     onnx_model = onnx.load(onnx_model_path.as_posix())
 
@@ -418,7 +418,7 @@ def quantize(onnx_model_path: Path) -> Path:
         model=onnx_model,
         quantization_mode=QuantizationMode.IntegerOps,
         force_fusions=True,
-        symmetric_weight=True,
+        symmetric_weight=False,
     )
 
     # Append "-quantized" at the end of the model's name
@@ -426,7 +426,9 @@ def quantize(onnx_model_path: Path) -> Path:
 
     # Save model
     print(f"Quantized model has been written at {quantized_model_path}: \N{heavy check mark}")
-    onnx.save_model(quantized_model, quantized_model_path.as_posix())
+    # onnx.save_model(quantized_model, quantized_model_path.as_posix())
+    # Deprecated quantize results in accuracy loss in fine-tuned model.
+    quantize_dynamic(onnx_model_path.as_posix(), quantized_model_path.as_posix())
 
     return quantized_model_path
 
