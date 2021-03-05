@@ -427,8 +427,8 @@ def quantize(onnx_model_path: Path) -> Path:
     # Save model
     print(f"Quantized model has been written at {quantized_model_path}: \N{heavy check mark}")
     # onnx.save_model(quantized_model, quantized_model_path.as_posix())
-    # Deprecated quantize results in accuracy loss in fine-tuned model.
-    quantize_dynamic(onnx_model_path.as_posix(), quantized_model_path.as_posix())
+    # Deprecated quantize results in accuracy loss in fine-tuned model inference on Mac.
+    quantize_dynamic(onnx_model_path, quantized_model_path)
 
     return quantized_model_path
 
